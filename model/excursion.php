@@ -1,102 +1,81 @@
 <?php
 class excursion
 {
-    private  $id ;
-    private $nom ;
-    private  $description;
-    private  $date ;
-    private $duree ;
-    private $niveaudiff;
-
-    public function __construct($id , $nom, $description, $date, $duree,$niveaudiff)
+    private $id;
+    private $nom;
+    private $email;
+    private $dated;
+    private $date_f;
+    private $ids;
+    
+    public function __construct($id = null, $nom, $email, $dated, $date_f, $ids)
     {
-        $this->id= $id;
+        $this->id = $id;
         $this->nom = $nom;
-        $this->description = $description;
-        $this->date= $date;
-        $this->duree = $duree;
-        $this->niveaudiff = $niveaudiff;
-
+        $this->email = $email;
+        $this->dated = $dated;
+        $this->date_f = $date_f;
+        $this->ids = $ids;
     }
-
 
     public function getId()
     {
         return $this->id;
     }
 
-
     public function getNom()
     {
         return $this->nom;
     }
-    public function getdescription()
+
+    public function getEmail()
     {
-        return $this->description;
+        return $this->email;
     }
 
-    public function getdate()
+    public function getDated()
     {
-        return $this->date;
-    }
-    public function getduree()
-    {
-        return $this->duree;
-    }
-    public function getniveaudiff()
-    {
-        return $this->niveaudiff;
+        return $this->dated;
     }
 
-    public function setid($id)
+    public function getDate_f()
+    {
+        return $this->date_f;
+    }
+
+    public function getIds()
+    {
+        return $this->ids;
+    }
+
+    public function setId($id)
     {
         $this->id = $id;
-
-        return $this;
     }
 
     public function setNom($nom)
     {
         $this->nom = $nom;
-
-        return $this;
-    }
-    public function setdescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
     }
 
-    
-
-
-    public function setdate($date)
+    public function setEmail($email)
     {
-        $this->date = $date;
-
-        return $this;
+        $this->email = $email;
     }
 
-
-    
-
-
-    public function setduree($duree)
+    public function setDated($dated)
     {
-        $this->duree = $duree;
-
-        return $this;
+        $this->dated = $dated;
     }
 
-
-    
-
-
-    public function setniveaudiff($niveaudiff)
+    public function setDate_f($date_f)
     {
-        $this->niveaudiff = $niveaudiff;
+        $this->date_f = $date_f;
+    }
 
-        return $this;
+    public function setIds($ids)
+    {
+        $this->ids = $ids;
     }
 }
+

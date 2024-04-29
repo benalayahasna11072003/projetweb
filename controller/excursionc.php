@@ -1,6 +1,7 @@
 <?php
 
-include '../config.php';
+require_once("../../config.php");
+require_once("../../model/excursion.php");
 
 class excursionc
 {
@@ -16,8 +17,34 @@ class excursionc
             die('Error:' . $e->getMessage());
         }
     }
+    public function listexcurcroi()
+    {
+        $sql = "SELECT * FROM excursion ORDer by date ASC";
+        $db = config::getConnexion();
+        try {
+            $liste = $db->query($sql);
+            return $liste;
+        } catch (Exception $e) {
+            die('Error:' . $e->getMessage());
+        }
+    }
+    public function rechercheex($t)
+    {
+        $sql = "SELECT * FROM excursion WHERE nom = :nom";
+        $db = config::getConnexion();
+        try {
+            $req = $db->prepare($sql);
+            $req->bindValue(':nom', $t, PDO::PARAM_STR); // Bind as string
+            $req->execute();
+            $liste = $req->fetchAll(PDO::FETCH_ASSOC);
+            return $liste;
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+    
     function deleteexcursion($id) {
-        $sql = "DELETE FROM excursion WHERE id = :id";
+        $sql = "DELETE FROM excursion WHERE ide = :id";
         $db = config::getConnexion();
         $req = $db->prepare($sql);
         $req->bindValue(':id', $id, PDO::PARAM_INT);
@@ -33,21 +60,21 @@ class excursionc
     }
     
     
+    
 
     function addexcursion($excursion)
     {
-        $sql = "INSERT INTO excursion (id,nom, description, date, duree, niveaudiff) 
-                VALUES (:id,:nom, :description, :date, :duree, :niveaudiff)";
+        $sql = "INSERT INTO excursion 
+                VALUES (null, :nom, :email, :datedd, :datedf, :ids)";
         $db = config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute([
-                'id' => $excursion->getid(),
                 'nom' => $excursion->getNom(),
-                'description' => $excursion->getdescription(),
-                'date' => $excursion->getdate(),
-                'duree' => $excursion->getduree(),
-                'niveaudiff' => $excursion->getniveaudiff(),
+                'email' => $excursion->getEmail(),
+                'datedd' => $excursion->getDated(),
+                'datedf' => $excursion->getDate_f(),
+                'ids' => $excursion->getIds()
             ]);
             return true;
         } catch (Exception $e) {
@@ -58,9 +85,10 @@ class excursionc
     
 
 
+
     function showexcursion($id)
 {
-    $sql = "SELECT * FROM excursion WHERE id = :id";
+    $sql = "SELECT * FROM excursion WHERE ide = :id";
     $db = config::getConnexion();
     try {
         $query = $db->prepare($sql);
@@ -72,47 +100,36 @@ class excursionc
         die('Error: ' . $e->getMessage());
     }
 }
+function updatedexcursion($excursion, $id)
+{   
+    try {
+        $db = config::getConnexion();
+        $query = $db->prepare(
+            'UPDATE excursion SET 
+                nom = :nom, 
+                mail = :email, 
+                date = :dated, 
+                date_f = :date_f
+            WHERE ide = :ide'
+        );
+        
+        $query->execute([
+            'ide' => $id,
+            'nom' => $excursion->getNom(),
+            'email' => $excursion->getEmail(),
+            'dated' => $excursion->getDated(),
+            'date_f' => $excursion->getDate_f()
+        ]);
+        
+        echo $query->rowCount() . " records updated successfully <br>";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
 
 
     // Dans excursionc.php
 
 // Méthode pour mettre à jour les informations d'une excursion
-function updateexcursion($excursion)
-{
-    // Ensure $excursion is a valid object and not empty
-    if (!$excursion instanceof excursion || empty($excursion->id)) {
-        return false;
-    }
 
-    // Prepare SQL query to update excursion information
-    $query = "UPDATE excursion SET 
-                nom = :nom, 
-                description = :description, 
-                date = :date, 
-                duree = :duree, 
-                niveaudiff = :niveaudiff 
-              WHERE id = :id";
-
-    // Prepare values to be passed to the query
-    $values = array(
-        ':id' => $excursion->id,
-        ':nom' => $excursion->nom,
-        ':description' => $excursion->description,
-        ':date' => $excursion->date,
-        ':duree' => $excursion->duree,
-        ':niveaudiff' => $excursion->niveaudiff
-    );
-
-    try {
-        // Execute prepared query with provided values
-        $stmt = $this->db->prepare($query);
-        $stmt->execute($values);
-
-        // Return true if update is successful
-        return true;
-    } catch (PDOException $e) {
-        // In case of error, display the error message and return false
-        echo "Erreur lors de la mise à jour de l'excursion : " . $e->getMessage();
-        return false;
-    }
 }

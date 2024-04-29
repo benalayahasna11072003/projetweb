@@ -1,0 +1,19 @@
+CREATE TABLE `excrusion` (
+ `ide` int(11) NOT NULL AUTO_INCREMENT,
+ `nom` varchar(20) NOT NULL,
+ `mail` varchar(400) NOT NULL,
+ `date` text NOT NULL,
+ `date_f` varchar(40) NOT NULL,
+ `ids` int(11) NOT NULL,
+ PRIMARY KEY (`ide`),
+ KEY `hk` (`ids`),
+ CONSTRAINT `hk` FOREIGN KEY (`ids`) REFERENCES `service` (`ids`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+service	CREATE TABLE `service` (
+ `ids` int(11) NOT NULL AUTO_INCREMENT,
+ `nom` varchar(20) NOT NULL,
+ `photo` varchar(80) NOT NULL,
+ `prix` float NOT NULL,
+ `date` varchar(10) NOT NULL,
+ PRIMARY KEY (`ids`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
